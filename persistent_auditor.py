@@ -16,7 +16,7 @@ def load_inventory():
             for line in lines[1:]:            # every other line = one transaction
                 line = line.strip()
                 if line != "":
-                  history.append(int(line))
+                    history.append(int(line))
  
         print("Inventory loaded from", FILE_NAME)
  
@@ -24,7 +24,17 @@ def load_inventory():
         print("No saved inventory found. Starting with an empty inventory.")
  
     return total, history
-
+ 
+ 
+def save_inventory(total, history):
+    """Write the total and every transaction back to the file."""
+    with open(FILE_NAME, "w") as file:
+        file.write(str(total) + "\n")         # line 1 = total
+        for amount in history:
+            file.write(str(amount) + "\n")    # one transaction per line
+    print("Inventory successfully saved to", FILE_NAME)
+ 
+ 
 def get_valid_input():
     """Keep asking until the user types a whole number or 'quit'.
     Returns the number, 'quit', or None for a rejected entry."""
@@ -61,6 +71,7 @@ print("=== Smart Inventory Auditor ===")
  
 total_units, history = load_inventory()
 failed_attempts = 0
+limit_exceeded = False                        # becomes True if stock goes past 500
  
 print("Current total:", total_units)
 print("Previous transactions:", history)
@@ -90,4 +101,11 @@ while True:
     elif total_units == 500:
         print("Stock is at maximum limit of 500 units.")
  
+# Show the report first, so the user sees what happened before any reset
 generate_report(total_units, history, failed_attempts)
+ 
+if limit_exceeded:
+    save_inventory(0, [])                     # wipe the saved data
+    print("Inventory has been reset. The next run will start from 0.")
+else:
+    save_inventory(total_units, history)      # normal save when user quits
