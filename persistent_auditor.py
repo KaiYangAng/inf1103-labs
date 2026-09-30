@@ -16,7 +16,7 @@ def load_inventory():
             for line in lines[1:]:            # every other line = one transaction
                 line = line.strip()
                 if line != "":
-                  
+                  history.append(int(line))
  
         print("Inventory loaded from", FILE_NAME)
  
