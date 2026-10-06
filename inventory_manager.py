@@ -36,6 +36,7 @@ def get_valid_int(prompt):
             print("Error: Please enter a whole number.")
 
 def add_product(inventory):
+    print("Add New Product")
     new_id = input("Enter Product ID: ")
     new_name = input("Enter Product Name: ")
     new_price = get_valid_float("Enter Product Price: ")
@@ -73,6 +74,11 @@ def search_product(inventory):
             return
     print("Product not found.")
 
+#Option 5
+def save_inventory(inventory, filename="inventory.json"):
+    with open(filename, 'w') as file:
+        json.dump(inventory, file, indent=4)
+
 #Load Inventory from JSON file
 def load_inventory(filename="inventory.json"):
     try:
@@ -106,7 +112,16 @@ while True:
         update_stock(product)
     elif user_option == "4":
         search_product(product)
+    elif user_option == "5":
+        print("Saving inventory...")
+        save_inventory(product)
+        print("Inventory saved successfully to inventory.json.")
     elif user_option == "6":
+        print("Saving inventory before exit...")
+        save_inventory(product)
+        print("Inventory saved successfully.")
         print("Thank you for using Inventory Management System.")
         print("Program terminated.")
         break
+    else:
+        print("Invalid option. Please try again.")
