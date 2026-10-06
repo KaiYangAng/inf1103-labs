@@ -73,17 +73,26 @@ def search_product(inventory):
             return
     print("Product not found.")
 
+#Load Inventory from JSON file
+def load_inventory(filename="inventory.json"):
+    try:
+        with open(filename, 'r') as file:
+            inventory = json.load(file)
+            print("inventory.json found.")
+            print("Inventory loaded successfully.")
+            return inventory
+    except FileNotFoundError:
+        print("Inventory file not found. Starting with an empty inventory.")
+        return []
+
+
 #Main Program
 print("========================================")
 print("INVENTORY MANAGEMENT SYSTEM")
 print("========================================")
 
 # Load existing inventory from JSON file
-product = [
-        {"ID": "P001", "Name": "Laptop", "Price": 1200.00, "Stock": 15},
-        {"ID": "P002", "Name": "Mouse", "Price": 25.50, "Stock": 40},
-        {"ID": "P003", "Name": "Keyboard", "Price": 45.00, "Stock": 25}
-    ]
+product = load_inventory()
 
 while True:
     show_menu()
