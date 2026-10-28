@@ -1,42 +1,44 @@
 class Product:
-    def __init__(self, id, name, price, quantity):
-        self.id = str(id)
-        self.name = str(name)
+    def __init__(self, product_id, name, price, stock): 
+        self.__product_id = str(product_id)
+        self.__name = str(name)
         self.__price = float(price)
-        self.__quantity = int(quantity)
+        self.__stock = int(stock)
 
-    def __str__(self):
-        return f"Product(id={self.id}, name={self.name}, price={self.__price}, quantity={self.__quantity})"
+    def get_product_id(self): 
+        return self.__product_id
+    
+    def update_stock(self, quantity):
+        if quantity < 0:
+                print("Stock cannot be negative.")
+                return False
+        else:
+                self.__stock = quantity
+                return True
+
+    def display_information(self):
+        print(f"ID: {self.__product_id} | Name: {self.__name} | Price: ${self.__price:.2f} | Stock: {self.__stock}")
 
 class Inventory:
     def __init__(self):
-        self.products = []
+        self.__products = []
 
     def add_product(self, product):
-        self.products.append(product)
-
-    def update_stock(self, product_id, new_quantity):
-        for product in self.products:
-            if product.id == str(product_id):
-                product.__quantity = int(new_quantity)
-                return True
-        return False
+        self.__products.append(product)
 
     def search_product(self, product_id):
-        for product in self.products:
-            if product.id == str(product_id):
+        for product in self.__products:
+            if product.get_product_id() == product_id:
                 return product
         return None
 
-    def display_inventory(self):
-        print("Current Inventory")
-        print("----------------------------")
-        for product in self.products:
-            print(f"ID: {product.id} | Name: {product.name} | Price: ${product.__price:.2f} | Stock: {product.__quantity}")
-        print("----------------------------")
+    def update_stock(self, product_id, quantity):
+        product = self.search_product(product_id)
+        if product is None:
+            return False
+        else:
+             return product.update_stock(quantity)
 
-inv = Inventory()
-inv.add_product(Product("P001", "Laptop", 1200, 15))
-inv.update_stock("P001", 50)
-print(inv.search_product("P001"))   # what's the stock now?
-inv.display_inventory()             # what happens here?
+    def display_all(self):
+        for product in self.__products:
+            product.display_information()
